@@ -10,6 +10,7 @@ const Menu = () =>{
     const dispatch = useDispatch();
     const activeMenuItem = useSelector((state)=>state.menu.activeMenuItem)
     const handleMenuClick = (itemName) =>{
+        
         dispatch(menuItemClick(itemName))
     }
 
