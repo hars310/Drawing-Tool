@@ -1,12 +1,32 @@
+import { MENU_ITEMS } from "@/constants";
 import { useEffect, useLayoutEffect, useRef } from "react";
 import { useDispatch, useSelector } from 'react-redux'
+import { menuItemClick,actionItemClick } from "@/slice/menuSlice";
+
 
 
 const Board = () =>{
     const canvasRef = useRef(null);
-    const shouldDraw = useRef(false);
-    const activeMenuItem = useSelector((state)=>state.menu.activeMenuItem);
+    const dispatch = useDispatch();  // for changing the actionmenuitem to null to use download button again and again
+    const shouldDraw = useRef(false); 
+    const {activeMenuItem,actionMenuItem} = useSelector((state)=>state.menu);
     const {color,size} = useSelector((state)=> state.toolbox[activeMenuItem])
+
+    useEffect(()=>{
+        if(!canvasRef.current) return;
+        const canvas = canvasRef.current;
+        const context = canvas.getContext('2d');
+
+        if(actionMenuItem===MENU_ITEMS.DOWNLOAD){
+            const URL = canvas.toDataURL();
+            const anchor = document.createElement('a') // anchor tag for download option
+            anchor.href = URL
+            anchor.download = 'sketch.jpg'
+            anchor.click();
+        }
+        dispatch(actionItemClick(null)) // changes the actionmenuItem from "DOWNLOAD" to NULL, so that useEffect can rerender the component
+
+    },[actionMenuItem, dispatch])
 
     useEffect(()=>{
         if(!canvasRef.current) return;
@@ -58,6 +78,7 @@ const Board = () =>{
         canvas.addEventListener('mouseup',handleMouseUp);
 
         return ()=>{
+            //cleanup functions
             canvas.removeEventListener('mousedown',handleMouseDown);
             canvas.removeEventListener('mousemove',handleMouseMove);
             canvas.removeEventListener('mouseup',handleMouseUp);

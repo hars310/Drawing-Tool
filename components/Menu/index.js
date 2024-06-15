@@ -10,8 +10,11 @@ const Menu = () =>{
     const dispatch = useDispatch();
     const activeMenuItem = useSelector((state)=>state.menu.activeMenuItem)
     const handleMenuClick = (itemName) =>{
-        
         dispatch(menuItemClick(itemName))
+    }
+
+    const handleActionItemClick = (itemName) =>{
+        dispatch(actionItemClick(itemName))
     }
 
     return (
@@ -22,13 +25,13 @@ const Menu = () =>{
             <div className={`${styles.iconsWrapper} ${activeMenuItem === MENU_ITEMS.ERASER ? styles.active : ''}`} onClick={() => handleMenuClick(MENU_ITEMS.ERASER)}>
             <FaEraser className={styles.icon} />
             </div>
-            <div className={styles.iconsWrapper}>
+            <div className={styles.iconsWrapper} onClick={()=>handleActionItemClick(MENU_ITEMS.UNDO)}>
                 <FaUndo className={styles.icon} />
             </div>
-            <div className={styles.iconsWrapper}>
+            <div className={styles.iconsWrapper} onClick={()=>handleActionItemClick(MENU_ITEMS.REDO)}>
                 <FaRedo className={styles.icon} />
             </div>
-            <div className={styles.iconsWrapper}>
+            <div className={styles.iconsWrapper} onClick={()=>handleActionItemClick(MENU_ITEMS.DOWNLOAD)}>
                 <FaFileArrowDown className={styles.icon} />
             </div>
         </div>
